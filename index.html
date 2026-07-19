@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11 Months of Us</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: linear-gradient(160deg, #f7e8de 0%, #f2d9cc 50%, #ecc9ba 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 12px;
+    overflow-x: hidden;
+  }
+
+  .hint {
+    color: #9c6b52;
+    font-style: italic;
+    font-size: 14px;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    animation: fadePulse 2.5s ease-in-out infinite;
+  }
+  @keyframes fadePulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .book {
+    position: relative;
+    width: min(92vw, 460px);
+    height: min(78vh, 640px);
+    perspective: 2600px;
+  }
+
+  .page {
+    position: absolute;
+    inset: 0;
+    background: #fffdfb;
+    border-radius: 6px 16px 16px 6px;
+    box-shadow: 0 10px 35px rgba(120, 70, 50, 0.25);
+    transform-origin: left center;
+    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1), box-shadow 1s ease;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 44px 34px;
+    cursor: pointer;
+    border-left: 5px solid #d9b8a5;
+  }
+
+  .page.flipped {
+    transform: rotateY(-180deg);
+    box-shadow: -10px 10px 35px rgba(120, 70, 50, 0.12);
+  }
+
+  /* Cover */
+  .cover {
+    background: linear-gradient(150deg, #8a4a35 0%, #a4553d 55%, #b96a4e 100%);
+    color: #fdf1e8;
+    border-left: 5px solid #6e3a29;
+  }
+  .cover .small-label {
+    font-size: 12px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #eec4ad;
+    margin-bottom: 20px;
+  }
+  .cover h1 {
+    font-size: 42px;
+    font-style: italic;
+    font-weight: normal;
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+  .cover .flower { font-size: 42px; margin-bottom: 24px; }
+  .cover .for-line {
+    font-style: italic;
+    font-size: 18px;
+    color: #f6ddca;
+  }
+  .cover .tap {
+    margin-top: 40px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #eec4ad;
+    font-style: italic;
+  }
+
+  /* Content pages */
+  .page .page-flower { font-size: 26px; margin-bottom: 22px; }
+  .page .stanza {
+    color: #5c4437;
+    font-size: 17.5px;
+    line-height: 2;
+    margin-bottom: 22px;
+  }
+  .page .highlight { color: #a4553d; font-style: italic; }
+  .page .divider {
+    width: 110px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c99a80, transparent);
+    margin: 4px auto 22px;
+  }
+  .page .page-num {
+    position: absolute;
+    bottom: 18px;
+    right: 24px;
+    font-size: 12px;
+    color: #c49b85;
+    font-style: italic;
+  }
+
+  /* Last page */
+  .last .closing-title {
+    font-size: 26px;
+    color: #5c3a2e;
+    font-style: italic;
+    margin-bottom: 18px;
+  }
+  .last .signoff { font-size: 16px; color: #8a5a45; font-style: italic; }
+  .last .name { font-size: 24px; color: #a4553d; font-style: italic; margin-top: 8px; }
+  .last .flower-end { font-size: 30px; margin-top: 26px; }
+
+  /* Controls */
+  .controls {
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .controls button {
+    font-family: Georgia, serif;
+    background: #fffdfb;
+    border: 1px solid #d9b8a5;
+    color: #8a4a35;
+    padding: 9px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-style: italic;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 10px rgba(120, 70, 50, 0.12);
+  }
+  .controls button:hover { background: #a4553d; color: #fdf1e8; border-color: #a4553d; }
+  .controls button:disabled { opacity: 0.35; cursor: default; }
+  .controls button:disabled:hover { background: #fffdfb; color: #8a4a35; border-color: #d9b8a5; }
+
+  .dots { display: flex; gap: 7px; }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #d9b8a5;
+    transition: all 0.3s ease;
+  }
+  .dot.active { background: #a4553d; transform: scale(1.35); }
+</style>
+</head>
+<body>
+
+<div class="hint">Tap the page (or use the buttons) to turn &#10048;</div>
+
+<div class="book" id="book">
+
+  <!-- Page 8: Last page (lowest z-index) -->
+  <div class="page last" data-index="7" style="z-index:1;">
+    <div class="page-flower">&#127799;</div>
+    <div class="closing-title">Happy 11 Months,<br>My Rushuu</div>
+    <div class="divider"></div>
+    <div class="signoff">Yours, in every moment,</div>
+    <div class="name">Khushi</div>
+    <div class="flower-end">&#10084;&#65039;</div>
+  </div>
+
+  <!-- Page 7 -->
+  <div class="page" data-index="6" style="z-index:2;">
+    <div class="page-flower">&#10048;</div>
+    <div class="stanza">
+      Eleven months, my Jaan, my light,<br>
+      of getting every wrong thing right.<br>
+      Of reading you like my favorite book,<br>
+      and falling deeper with every look.
+    </div>
+    <div class="divider"></div>
+    <div class="stanza">
+      So here's to you, and here's to us,<br>
+      to love that's quiet, without the fuss.<br>
+      I'm nowhere close to being done,<br>
+      <span class="highlight">eleven months down, a lifetime to come.</span>
+    </div>
+    <div class="page-num">7</div>
+  </div>
+
+  <!-- Page 6 -->
+  <div class="page" data-index="5" style="z-index:3;">
+    <div class="page-flower">&#10048;</div>
+    <div class="stanza">
+      You taught me something, quietly too,<br>
+      the difference between the old and new.<br>
+      I don't just save the words you send,<br>
+      I keep them, treasure them, till the end.
+    </div>
+    <div class="divider"></div>
+    <div class="stanza">
+      Saved is for storage, kept is for gold,<br>
+      and your every word is mine to hold.<br>
+      Every letter, poem, and little note,<br>
+      lives somewhere close, near my throat.
+    </div>
+    <div class="page-num">6</div>
+  </div>
+
+  <!-- Page 5 -->
+  <div class="page" data-index="4" style="z-index:4;">
+    <div class="page-flower">&#10048;</div>
+    <div class="stanza">
+      And then there's the way you say my name.<br>
+      <span class="highlight">"Khushi"</span> has never sounded the same.<br>
+      My ears just pop, my heart stands tall,<br>
+      like my own name waited for your call.
+    </div>
+    <div class="page-num">5</div>
+  </div>
+
+  <!-- Page 4 -->
+  <div class="page" data-index="3" style="z-index:5;">
+    <div class="page-flower">&#10048;</div>
+    <div class="stanza">
+      Now here's a truth I must confess,<br>
+      I tried to be funny, more or less.<br>
+      Eleven months of my finest jokes,<br>
+      and the only laughter... was from other folks.
+    </div>
+    <div class="divider"></div>
+    <div class="stanza">
+      You're the comedian, that title's yours,<br>
+      you're the one my laughter adores.<br>
+      So I've retired, I've lost the fight,<br>
+      making you smile is my job, and that feels right.
+    </div>
+    <div class="page-num">4</div>
+  </div>
+
+  <!-- Page 3 -->
+  <div class="page" data-index="2" style="z-index:6;">
+    <div class="page-flower">&#10048;</div>
+    <div class="stanza">
+      Loving you is fresh flowers in bloom,<br>
+      the kind I never thought I'd have room<br>
+      for a guy like me, and yet here you are.<br>
+      <span class="highlight">My one and only flower, by far.</span>
+    </div>
+    <div class="divider"></div>
+    <div class="stanza">
+      Funny thing is, I never asked for a rose,<br>
+      never needed petals or any of those.<br>
+      Why would I ask for flowers, my dear,<br>
+      when the prettiest one is standing right here?
+    </div>
+    <div class="page-num">3</div>
+  </div>
+
+  <!-- Page 2 -->
+  <div class="page" data-index="1" style="z-index:7;">
+    <div class="page-flower">&#10048;</div>
+    <div class="stanza">
+      Eleven months of reading you,<br>
+      of listening, learning, knowing you.<br>
+      Not to solve you like some mystery,<br>
+      but to love each page of your history.
+    </div>
+    <div class="divider"></div>
+    <div class="stanza">
+      Each day you let me in a little more,<br>
+      each moment worth the waiting for.<br>
+      I never wished to change a thing,<br>
+      just to witness every season you bring.
+    </div>
+    <div class="page-num">2</div>
+  </div>
+
+  <!-- Page 1: Cover (highest z-index) -->
+  <div class="page cover" data-index="0" style="z-index:8;">
+    <div class="small-label">Eleven Months &bull; One Heart</div>
+    <div class="flower">&#127800;</div>
+    <h1>11 Months<br>of Us</h1>
+    <div class="for-line">For My Rushuu</div>
+    <div class="tap">~ tap to open ~</div>
+  </div>
+
+</div>
+
+<div class="controls">
+  <button id="prevBtn" disabled>&#8592; Back</button>
+  <div class="dots" id="dots"></div>
+  <button id="nextBtn">Turn &#8594;</button>
+</div>
+
+<script>
+  var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+  // sort by data-index ascending (0 = cover)
+  pages.sort(function(a, b) {
+    return parseInt(a.getAttribute('data-index')) - parseInt(b.getAttribute('data-index'));
+  });
+
+  var totalPages = pages.length;
+  var current = 0; // number of pages flipped
+
+  var dotsWrap = document.getElementById('dots');
+  for (var i = 0; i < totalPages; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    dotsWrap.appendChild(d);
+  }
+  var dots = dotsWrap.children;
+
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+
+  function update() {
+    for (var i = 0; i < totalPages; i++) {
+      if (i < current) {
+        pages[i].classList.add('flipped');
+        pages[i].style.zIndex = i + 1; // flipped pages stack on the left
+      } else {
+        pages[i].classList.remove('flipped');
+        pages[i].style.zIndex = totalPages - i + 10; // unflipped stack, top page first
+      }
+      dots[i].className = 'dot' + (i === Math.min(current, totalPages - 1) ? ' active' : '');
+    }
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === totalPages - 1;
+    nextBtn.innerHTML = (current === totalPages - 1) ? 'The End &#10084;' : 'Turn &#8594;';
+  }
+
+  function next() { if (current < totalPages - 1) { current++; update(); } }
+  function prev() { if (current > 0) { current--; update(); } }
+
+  nextBtn.addEventListener('click', next);
+  prevBtn.addEventListener('click', prev);
+
+  pages.forEach(function(p) {
+    p.addEventListener('click', next);
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+
+  update();
+</script>
+
+</body>
+</html>
