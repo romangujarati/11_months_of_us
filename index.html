@@ -7,6 +7,13 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --ink: #5c4437;
+    --accent: #a4553d;
+    --paper: #fffdfb;
+    --script: 'Brush Script MT', 'Segoe Script', 'Comic Sans MS', cursive;
+  }
+
   body {
     font-family: Georgia, 'Times New Roman', serif;
     background: linear-gradient(160deg, #f9e4d8 0%, #f3cfc0 45%, #ecb9a6 100%);
@@ -15,505 +22,557 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px 12px 34px;
+    padding: 18px 12px 30px;
     overflow-x: hidden;
-    position: relative;
   }
 
-  /* ---------- Floating hearts background ---------- */
-  #heartsLayer {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
+  /* ---------- Floating romance layer ---------- */
+  #heartsLayer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
   .float-item {
-    position: absolute;
-    bottom: -8vh;
-    animation-name: rise;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    position: absolute; bottom: -8vh;
+    animation-name: rise; animation-timing-function: linear; animation-iteration-count: infinite;
     will-change: transform, opacity;
   }
   @keyframes rise {
     0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
-    8%   { opacity: 0.85; }
-    50%  { transform: translateY(-55vh) translateX(22px) rotate(12deg); }
-    88%  { opacity: 0.75; }
-    100% { transform: translateY(-115vh) translateX(-14px) rotate(-10deg); opacity: 0; }
+    8%   { opacity: 0.8; }
+    50%  { transform: translateY(-55vh) translateX(22px) rotate(14deg); }
+    88%  { opacity: 0.7; }
+    100% { transform: translateY(-115vh) translateX(-16px) rotate(-12deg); opacity: 0; }
   }
 
-  /* ---------- Anniversary banner ---------- */
+  /* ---------- Banner ---------- */
   .banner {
-    position: relative;
-    z-index: 2;
-    font-size: clamp(24px, 5vw, 36px);
-    font-style: italic;
+    position: relative; z-index: 2;
+    font-size: clamp(24px, 5vw, 34px); font-style: italic;
     background: linear-gradient(90deg, #a4553d, #d1774f, #a4553d);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    letter-spacing: 1px; margin-bottom: 4px; text-align: center;
     animation: sway 4s ease-in-out infinite;
-    text-align: center;
   }
-  @keyframes sway {
-    0%, 100% { transform: rotate(-1.2deg); }
-    50% { transform: rotate(1.2deg); }
-  }
+  @keyframes sway { 0%,100% { transform: rotate(-1deg);} 50% { transform: rotate(1deg);} }
   .banner-sub {
-    position: relative;
-    z-index: 2;
-    color: #9c6b52;
-    font-style: italic;
-    font-size: 13px;
-    letter-spacing: 2px;
-    margin-bottom: 16px;
+    position: relative; z-index: 2; color: #9c6b52; font-style: italic;
+    font-size: 12.5px; letter-spacing: 2px; margin-bottom: 14px;
     animation: fadePulse 2.5s ease-in-out infinite;
   }
-  @keyframes fadePulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
+  @keyframes fadePulse { 0%,100%{opacity:.5;} 50%{opacity:1;} }
 
   /* ---------- Book ---------- */
   .book {
-    position: relative;
-    z-index: 2;
-    width: min(92vw, 470px);
-    height: min(74vh, 620px);
-    perspective: 2800px;
+    position: relative; z-index: 2;
+    width: min(93vw, 480px);
+    height: min(76vh, 640px);
+    perspective: 2400px;
   }
 
   .page {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(105deg, #fffdfb 0%, #fdf6ef 78%, #f6e6d9 100%);
-    border-radius: 4px 14px 14px 4px;
-    box-shadow: 0 10px 35px rgba(120, 70, 50, 0.28);
+    position: absolute; inset: 0;
     transform-origin: left center;
     transform-style: preserve-3d;
-    transition: transform 1.5s cubic-bezier(0.7, 0.05, 0.3, 0.95), box-shadow 1.5s ease;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    transition: transform 0.9s cubic-bezier(0.66, 0.02, 0.3, 0.99);
     cursor: pointer;
+  }
+  .page.flipped { transform: rotateY(-180deg); }
+
+  /* Front of page */
+  .page-front {
+    position: absolute; inset: 0;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    background:
+      radial-gradient(ellipse at center, rgba(255,255,255,0) 60%, rgba(140,90,60,0.06) 100%),
+      linear-gradient(105deg, #fffdfb 0%, #fdf5ee 72%, #f5e3d4 100%);
+    border-radius: 6px 16px 16px 6px;
     border-left: 6px solid #cf9d84;
+    box-shadow: 0 12px 34px rgba(120, 70, 50, 0.28);
+    overflow: hidden;
   }
-  .page.flipped {
-    transform: rotateY(-180deg);
-    box-shadow: -10px 10px 20px rgba(120, 70, 50, 0.10);
+  /* paper edge thickness on the right */
+  .page-front::after {
+    content: '';
+    position: absolute; top: 0; right: 0; bottom: 0; width: 10px;
+    background: linear-gradient(to left, rgba(140,90,60,0.14), rgba(140,90,60,0));
+    pointer-events: none;
   }
+  /* Back of page (visible mid-turn) */
+  .page-back {
+    position: absolute; inset: 0;
+    transform: rotateY(180deg);
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    background: linear-gradient(255deg, #fbf3ea 0%, #f6e8db 100%);
+    border-radius: 16px 6px 6px 16px;
+    border-right: 6px solid #d9b294;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: -8px 10px 26px rgba(120, 70, 50, 0.12);
+  }
+  .page-back span { font-size: 34px; opacity: 0.14; filter: sepia(0.5); }
 
   .page-inner {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
     text-align: center;
-    padding: 42px 34px;
-    border-radius: inherit;
+    padding: 34px 30px 30px;
   }
-  /* dramatic bend illusion while turning */
-  .page.turning .page-inner {
-    animation: bend 1.5s cubic-bezier(0.7, 0.05, 0.3, 0.95);
-  }
+  .page.turning .page-inner { animation: bend 0.9s cubic-bezier(0.66, 0.02, 0.3, 0.99); }
   @keyframes bend {
     0%   { transform: none; }
-    35%  { transform: skewY(2.2deg) scaleX(0.955) scaleY(1.015); }
-    70%  { transform: skewY(-1deg) scaleX(0.985); }
+    38%  { transform: skewY(2.4deg) scaleX(0.95) scaleY(1.015); }
+    72%  { transform: skewY(-1.1deg) scaleX(0.985); }
     100% { transform: none; }
   }
-  /* moving shadow across the page while turning */
   .shade {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0;
+    position: absolute; inset: 0; pointer-events: none; opacity: 0;
     border-radius: inherit;
-    background: linear-gradient(100deg, rgba(90,45,25,0) 30%, rgba(90,45,25,0.38) 100%);
+    background: linear-gradient(100deg, rgba(90,45,25,0) 25%, rgba(90,45,25,0.42) 100%);
   }
-  .page.turning .shade {
-    animation: shadeAnim 1.5s ease;
-  }
-  @keyframes shadeAnim {
-    0%   { opacity: 0; }
-    35%  { opacity: 1; }
-    100% { opacity: 0; }
-  }
+  .page.turning .shade { animation: shadeAnim 0.9s ease; }
+  @keyframes shadeAnim { 0%{opacity:0;} 38%{opacity:1;} 100%{opacity:0;} }
 
   /* ---------- Cover ---------- */
-  .cover {
+  .cover .page-front {
     background: linear-gradient(150deg, #8a4a35 0%, #a4553d 55%, #c07454 100%);
     border-left: 6px solid #6e3a29;
   }
   .cover .page-inner { color: #fdf1e8; }
-  .cover .small-label {
-    font-size: 12px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: #eec4ad;
-    margin-bottom: 20px;
-  }
-  .cover h1 {
-    font-size: 42px;
-    font-style: italic;
-    font-weight: normal;
-    line-height: 1.2;
-    margin-bottom: 22px;
-  }
-  .cover .flower { font-size: 44px; margin-bottom: 22px; animation: floatCover 3s ease-in-out infinite; }
-  @keyframes floatCover {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-  .cover .for-line { font-style: italic; font-size: 18px; color: #f6ddca; }
-  .cover .tap {
-    margin-top: 38px;
-    font-size: 13px;
-    letter-spacing: 2px;
-    color: #eec4ad;
-    font-style: italic;
-    animation: fadePulse 2s ease-in-out infinite;
+  .cover .small-label { font-size: 11.5px; letter-spacing: 5px; text-transform: uppercase; color: #eec4ad; margin-bottom: 18px; }
+  .cover h1 { font-size: 40px; font-style: italic; font-weight: normal; line-height: 1.2; margin-bottom: 18px; }
+  .cover .flower { font-size: 40px; margin-bottom: 18px; animation: floaty 3s ease-in-out infinite; }
+  @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+  .cover .for-line { font-style: italic; font-size: 17px; color: #f6ddca; }
+  .cover .tap { margin-top: 26px; font-size: 12.5px; letter-spacing: 2px; color: #eec4ad; font-style: italic; animation: fadePulse 2s ease-in-out infinite; }
+
+  /* ---------- Wax seal ---------- */
+  .seal {
+    width: 62px; height: 62px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #d96a5a, #a03227 62%, #7e2018);
+    color: #f8d8c8; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-style: italic; letter-spacing: 1px;
+    box-shadow: inset 0 2px 6px rgba(255,255,255,0.25), inset 0 -4px 8px rgba(0,0,0,0.3), 0 3px 8px rgba(0,0,0,0.25);
+    border: 3px double rgba(120, 25, 15, 0.55);
+    margin-top: 20px;
+    transform: rotate(-6deg);
   }
 
-  /* ---------- Content pages ---------- */
-  .page .page-flower { font-size: 24px; margin-bottom: 18px; }
-  .page .prose {
-    color: #5c4437;
-    font-size: 16px;
-    line-height: 1.9;
-    max-width: 100%;
+  /* ---------- Polaroid photos ---------- */
+  .polaroid {
+    background: #fff;
+    padding: 8px 8px 6px;
+    box-shadow: 0 6px 16px rgba(90, 50, 30, 0.25);
+    border-radius: 3px;
+    width: 200px;
+    margin-bottom: 14px;
+    position: relative;
+    transform: rotate(var(--rot, -3deg));
   }
-  .page .prose em { color: #a4553d; }
-  .page .lines {
-    color: #7a5а45;
+  .polaroid img {
+    width: 100%; height: 150px; object-fit: cover; display: block; border-radius: 2px;
   }
-  .page .divider {
-    width: 110px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #c99a80, transparent);
-    margin: 16px auto;
+  .polaroid .cap {
+    font-family: var(--script);
+    font-size: 14px; color: #8a5a45; padding-top: 6px;
   }
-  .page .page-num {
-    position: absolute;
-    bottom: 16px;
-    right: 22px;
-    font-size: 12px;
-    color: #c49b85;
-    font-style: italic;
+  /* washi tape */
+  .polaroid::before, .polaroid::after {
+    content: '';
+    position: absolute; top: -10px; width: 54px; height: 20px;
+    background: rgba(228, 160, 130, 0.5);
+    box-shadow: 0 1px 3px rgba(90,50,30,0.15);
+  }
+  .polaroid::before { left: -16px; transform: rotate(-38deg); }
+  .polaroid::after  { right: -16px; transform: rotate(38deg); background: rgba(180, 200, 160, 0.45); }
+
+  /* photo & caption entrance when page is active */
+  .page .polaroid, .page .doodle-line { opacity: 0; }
+  .page.active .polaroid {
+    animation: photoIn 0.9s 0.35s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  }
+  @keyframes photoIn {
+    0%   { opacity: 0; transform: translateY(20px) rotate(var(--rot, -3deg)) scale(0.93); }
+    100% { opacity: 1; transform: translateY(0) rotate(var(--rot, -3deg)) scale(1); }
+  }
+  .page.active .doodle-line { animation: softIn 0.8s 0.75s ease both; }
+  @keyframes softIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .page.active .prose { animation: softIn 0.7s 0.2s ease both; }
+
+  /* ---------- Prose ---------- */
+  .prose { color: var(--ink); font-size: 15.5px; line-height: 1.85; }
+  .photo-page .prose { font-size: 14.5px; line-height: 1.72; }
+  .prose em { color: var(--accent); }
+  .divider { width: 100px; height: 1px; background: linear-gradient(90deg, transparent, #c99a80, transparent); margin: 12px auto; }
+  .page-num { position: absolute; bottom: 12px; right: 20px; font-size: 11.5px; color: #c49b85; font-style: italic; }
+
+  /* ---------- Decorations ---------- */
+  .pressed { position: absolute; font-size: 26px; filter: sepia(0.45) saturate(0.6) opacity(0.7); pointer-events: none; }
+  .pressed.tl { top: 12px; left: 14px; transform: rotate(-18deg); }
+  .pressed.br { bottom: 34px; right: 16px; transform: rotate(16deg); }
+  .sparkle { position: absolute; color: #d9a86c; font-size: 13px; pointer-events: none; animation: twinkle 2.6s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100% { opacity: 0.15; transform: scale(0.85);} 50% { opacity: 0.9; transform: scale(1.15);} }
+  .doodle-line { font-family: var(--script); font-size: 15px; color: #a4553d; margin-top: 6px; }
+
+  .sticker {
+    position: absolute; top: 14px; right: 12px;
+    transform: rotate(7deg);
+    background: #fff8ef;
+    border: 1px dashed #cfa084;
+    padding: 5px 10px; border-radius: 8px;
+    font-family: var(--script); font-size: 12.5px; color: #8a5a45;
+    box-shadow: 0 2px 6px rgba(120, 70, 50, 0.15);
   }
 
   /* ---------- Last page ---------- */
-  .last .closing-title {
-    font-size: 27px;
-    color: #5c3a2e;
-    font-style: italic;
-    margin-bottom: 16px;
-    line-height: 1.4;
-  }
-  .last .signoff { font-size: 16px; color: #8a5a45; font-style: italic; }
-  .last .name { font-size: 24px; color: #a4553d; font-style: italic; margin-top: 8px; }
-  .last .flower-end { font-size: 30px; margin-top: 24px; animation: floatCover 3s ease-in-out infinite; }
+  .last .closing-title { font-size: 25px; color: #5c3a2e; font-style: italic; margin-bottom: 12px; line-height: 1.4; }
+  .last .signoff { font-size: 15px; color: #8a5a45; font-style: italic; }
+  .last .name { font-size: 22px; color: var(--accent); font-style: italic; margin-top: 6px; }
 
   /* ---------- Controls ---------- */
-  .controls {
-    position: relative;
-    z-index: 2;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+  .controls { position: relative; z-index: 2; margin-top: 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
   .controls button {
-    font-family: Georgia, serif;
-    background: #fffdfb;
-    border: 1px solid #d9b8a5;
-    color: #8a4a35;
-    padding: 9px 22px;
-    border-radius: 30px;
-    font-size: 14px;
-    font-style: italic;
-    cursor: pointer;
-    transition: all 0.25s ease;
+    font-family: Georgia, serif; background: var(--paper);
+    border: 1px solid #d9b8a5; color: #8a4a35;
+    padding: 8px 20px; border-radius: 30px; font-size: 14px; font-style: italic;
+    cursor: pointer; transition: all 0.25s ease;
     box-shadow: 0 3px 10px rgba(120, 70, 50, 0.12);
   }
-  .controls button:hover { background: #a4553d; color: #fdf1e8; border-color: #a4553d; }
+  .controls button:hover { background: var(--accent); color: #fdf1e8; border-color: var(--accent); }
   .controls button:disabled { opacity: 0.35; cursor: default; }
-  .controls button:disabled:hover { background: #fffdfb; color: #8a4a35; border-color: #d9b8a5; }
-
-  .dots { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 220px; }
-  .dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #d9b8a5;
-    transition: all 0.3s ease;
-  }
-  .dot.active { background: #a4553d; transform: scale(1.4); }
+  .dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 210px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #d9b8a5; transition: all 0.3s ease; }
+  .dot.active { background: var(--accent); transform: scale(1.4); }
 </style>
 </head>
 <body>
 
 <div id="heartsLayer"></div>
 
-<div class="banner">Happy 11 Month Anniversary My Jaan, My Betuduuu</div>
+<div class="banner">Happy 11 Month Anniversary</div>
 <div class="banner-sub">~ tap the page to turn &#10048; ~</div>
 
 <div class="book" id="book">
 
   <!-- LAST PAGE -->
   <div class="page last" data-index="13">
-    <div class="page-inner">
-      <div class="page-flower">&#127799;</div>
-      <div class="closing-title">Happy 11 MonthsMy Jaan, My Betuduuu,<br>My Rushuu</div>
-      <div class="divider"></div>
-      <div class="prose">Here's to every page we've already lived...<br>and every chapter we haven't written yet.</div>
-      <div class="divider"></div>
-      <div class="signoff">Yours, in every moment,</div>
-      <div class="name">Khushi</div>
-      <div class="flower-end">&#10084;&#65039;</div>
+    <div class="page-front">
+      <div class="page-inner">
+        <span class="sparkle" style="top:40px; left:44px;">&#10022;</span>
+        <span class="sparkle" style="top:80px; right:52px; animation-delay:.8s;">&#10022;</span>
+        <span class="sparkle" style="bottom:120px; left:60px; animation-delay:1.4s;">&#10022;</span>
+        <div class="closing-title">Happy 11 Months,<br>My Rushuu</div>
+        <div class="divider"></div>
+        <div class="prose">Here's to every page we've already lived...<br>and every chapter we haven't written yet.</div>
+        <div class="divider"></div>
+        <div class="signoff">Yours, in every moment,</div>
+        <div class="name">Khushi</div>
+        <div class="seal">K &#9829; R</div>
+      </div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
   <!-- PAGE 13 -->
   <div class="page" data-index="12">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        If these eleven months have felt this beautiful...<br><br>
-        I honestly can't wait to see<br>
-        <em>what forever writes for us.</em>
+    <div class="page-front">
+      <div class="page-inner">
+        <span class="sparkle" style="top:60px; left:50px;">&#10022;</span>
+        <span class="sparkle" style="top:110px; right:56px; animation-delay:.7s;">&#10022;</span>
+        <span class="sparkle" style="bottom:140px; right:80px; animation-delay:1.2s;">&#10022;</span>
+        <span class="sparkle" style="bottom:100px; left:70px; animation-delay:1.8s;">&#10022;</span>
+        <div class="prose">
+          If these eleven months have felt this beautiful...<br><br>
+          I honestly can't wait to see<br>
+          <em>what forever writes for us.</em>
+        </div>
+        <div class="doodle-line">to forever &amp; a little more &#9825;</div>
+        <div class="page-num">13</div>
       </div>
-      <div class="page-num">13</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 12 -->
-  <div class="page" data-index="11">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        Eleven months, my Jaan.<br>
-        Eleven months of becoming a better version of myself,<br>
-        simply because I got to love you.<br><br>
-        Thank you...<br>
-        For trusting me with your heart.<br>
-        For letting me become part of your world.<br>
-        For making ordinary days feel like<br>
-        <em>memories worth keeping.</em>
+  <!-- PAGE 12 : beach photo -->
+  <div class="page photo-page" data-index="11">
+    <div class="page-front">
+      <div class="page-inner">
+        <div class="polaroid" style="--rot: 2.5deg;">
+          <img src="IMG_3372.jpg" alt="us">
+          <div class="cap">ordinary days, extraordinary you &#9825;</div>
+        </div>
+        <div class="prose">
+          Eleven months, my Jaan.<br>
+          Eleven months of becoming a better version of myself,<br>
+          simply because I got to love you.<br><br>
+          Thank you...<br>
+          For trusting me with your heart.<br>
+          For letting me become part of your world.<br>
+          For making ordinary days feel like<br>
+          <em>memories worth keeping.</em>
+        </div>
+        <div class="page-num">12</div>
       </div>
-      <div class="page-num">12</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 11 -->
+  <!-- PAGE 11 : ordinary tuesdays + smoke break sticker -->
   <div class="page" data-index="10">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        These eleven months taught me something<br>I never expected.<br><br>
-        Love isn't made of grand surprises or perfect moments.<br>
-        It's built from ordinary Tuesdays.<br>
-        From random conversations.<br>
-        From teasing each other.<br>
-        From waiting for replies.<br>
-        From hearing your voice after a long day.<br>
-        From choosing each other again...<br>
-        and again... and again.<br><br>
-        And somehow, all those little moments became<br>
-        <em>the biggest part of my happiness.</em>
+    <div class="page-front">
+      <div class="page-inner">
+        <div class="sticker">smoke break club &#128684; &#9825;</div>
+        <div class="prose">
+          These eleven months taught me something<br>I never expected.<br><br>
+          Love isn't made of grand surprises or perfect moments.<br>
+          It's built from ordinary Tuesdays.<br>
+          From random conversations.<br>
+          From teasing each other.<br>
+          From waiting for replies.<br>
+          From hearing your voice after a long day.<br>
+          From choosing each other again...<br>
+          and again... and again.<br><br>
+          And somehow, all those little moments became<br>
+          <em>the biggest part of my happiness.</em>
+        </div>
+        <div class="page-num">11</div>
       </div>
-      <div class="page-num">11</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 10 -->
+  <!-- PAGE 10 : vintage, years from now -->
   <div class="page" data-index="9">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        And maybe one day, years from now,<br>
-        when life becomes louder<br>
-        and time moves faster than we'd like...<br><br>
-        I'll still open those words.<br><br>
-        Not because I need reminding that you love me.<br>
-        But because <em>I love remembering how it all felt.</em>
+    <div class="page-front">
+      <div class="page-inner">
+        <span class="pressed tl">&#127802;</span>
+        <span class="pressed br">&#127810;</span>
+        <div class="prose">
+          And maybe one day, years from now,<br>
+          when life becomes louder<br>
+          and time moves faster than we'd like...<br><br>
+          I'll still open those words.<br><br>
+          Not because I need reminding that you love me.<br>
+          But because <em>I love remembering how it all felt.</em>
+        </div>
+        <div class="doodle-line">some things never fade &#9825;</div>
+        <div class="page-num">10</div>
       </div>
-      <div class="page-num">10</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 9 -->
-  <div class="page" data-index="8">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        That's why I don't just save your messages,<br>
-        your precious little thoughtful things<br>
-        you've given me so far...<br><br>
-        <em>I keep them.</em><br><br>
-        Every written thought.<br>
-        Every precious little time.<br>
-        Every "good morning Khushal."<br>
-        Every "Dhakaar."<br><br>
-        Because pieces of you deserve a home inside me.
+  <!-- PAGE 9 : mirror kiss photo -->
+  <div class="page photo-page" data-index="8">
+    <div class="page-front">
+      <div class="page-inner">
+        <div class="polaroid" style="--rot: -3deg;">
+          <img src="f6430df2-7077-4e5c-9d0a-a93de3aad4c0.JPG" alt="us">
+          <div class="cap">kept, not saved &#9825;</div>
+        </div>
+        <div class="prose">
+          I don't just save your messages,<br>
+          your precious little thoughtful things...<br>
+          <em>I keep them.</em><br><br>
+          Every written thought.<br>
+          Every precious little time.<br>
+          Every "good morning Khushal."<br>
+          Every "Dhakaar."<br><br>
+          Because pieces of you deserve a home inside me.
+        </div>
+        <div class="page-num">9</div>
       </div>
-      <div class="page-num">9</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 8 -->
+  <!-- PAGE 8 : saved vs kept -->
   <div class="page" data-index="7">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        You changed little things about me too.<br>
-        Quietly. Without even trying.<br><br>
-        You taught me that there is a difference<br>
-        between saving something... and keeping it.<br><br>
-        Saved things live in folders.<br>
-        <em>Kept things are alive in the heart.</em>
+    <div class="page-front">
+      <div class="page-inner">
+        <span class="pressed tl">&#127800;</span>
+        <span class="sparkle" style="bottom:110px; right:60px;">&#10022;</span>
+        <div class="prose">
+          You changed little things about me too.<br>
+          Quietly. Without even trying.<br><br>
+          You taught me that there is a difference<br>
+          between saving something... and keeping it.<br><br>
+          Saved things live in folders.<br>
+          <em>Kept things are alive in the heart.</em>
+        </div>
+        <div class="doodle-line">you live here now &#8594; &#9825;</div>
+        <div class="page-num">8</div>
       </div>
-      <div class="page-num">8</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 7 -->
+  <!-- PAGE 7 : Khushi name -->
   <div class="page" data-index="6">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        And then there's my favorite sound<br>in the whole world...<br>
-        The way you say my name.<br><br>
-        <em>"Khushi."</em><br><br>
-        No one has ever said those six letters the way you do.<br>
-        When it leaves your lips, it feels different.<br>
-        Warmer. Safer.<br><br>
-        It's funny how a name I've heard my entire life<br>
-        somehow waited for your voice<br>
-        before it finally felt like mine.
+    <div class="page-front">
+      <div class="page-inner">
+        <span class="sparkle" style="top:70px; left:56px;">&#10022;</span>
+        <span class="sparkle" style="top:120px; right:60px; animation-delay:.9s;">&#10022;</span>
+        <span class="sparkle" style="bottom:130px; left:76px; animation-delay:1.5s;">&#10022;</span>
+        <div class="prose">
+          And then there's my favorite sound<br>in the whole world...<br>
+          The way you say my name.<br><br>
+          <em style="font-size:22px;">"Khushi."</em><br><br>
+          No one has ever said those six letters the way you do.<br>
+          When it leaves your lips, it feels different.<br>
+          Warmer. Safer.<br><br>
+          It's funny how a name I've heard my entire life<br>
+          somehow waited for your voice<br>
+          before it finally felt like mine.
+        </div>
+        <div class="page-num">7</div>
       </div>
-      <div class="page-num">7</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 6 -->
-  <div class="page" data-index="5">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        The funny thing is,<br>I never wished for roses.<br><br>
-        People spend their lives asking for bouquets,<br>
-        but why would I ask the world for flowers<br>
-        when the prettiest one somehow<br>
-        <em>chose to walk beside me?</em><br><br>
-        You became everything<br>
-        I never knew I was waiting for.
+  <!-- PAGE 6 : cafe photo -->
+  <div class="page photo-page" data-index="5">
+    <div class="page-front">
+      <div class="page-inner">
+        <div class="polaroid" style="--rot: 3deg;">
+          <img src="93A4C2CD-925C-4242-ABED-CFA1DFD36826.JPG" alt="us">
+          <div class="cap">you, beside me &#9825;</div>
+        </div>
+        <div class="prose">
+          The funny thing is,<br>I never wished for roses.<br><br>
+          People spend their lives asking for bouquets,<br>
+          but why would I ask the world for flowers<br>
+          when the prettiest one somehow<br>
+          <em>chose to walk beside me?</em><br><br>
+          You became everything<br>
+          I never knew I was waiting for.
+        </div>
+        <div class="page-num">6</div>
       </div>
-      <div class="page-num">6</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 5 -->
-  <div class="page" data-index="4">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        Loving you feels like watching flowers bloom<br>
-        after believing my whole life<br>
-        that my garden would always stay empty.<br><br>
-        I never thought someone like me<br>
-        would have room for something this beautiful.<br><br>
-        And yet... here you are.<br>
-        <em>My favorite flower.</em><br>
-        The one I'll always stop to admire.
+  <!-- PAGE 5 : flower-emoji photo -->
+  <div class="page photo-page" data-index="4">
+    <div class="page-front">
+      <div class="page-inner">
+        <span class="pressed tl">&#127800;</span>
+        <div class="polaroid" style="--rot: -2.5deg;">
+          <img src="70FC85DC-3224-48AF-B205-3BC969BD2EA5.JPG" alt="us">
+          <div class="cap">my favorite flower &#127800;</div>
+        </div>
+        <div class="prose">
+          Loving you feels like watching flowers bloom<br>
+          after believing my whole life<br>
+          that my garden would always stay empty.<br><br>
+          And yet... here you are.<br>
+          <em>My favorite flower.</em><br>
+          The one I'll always stop to admire.
+        </div>
+        <div class="page-num">5</div>
       </div>
-      <div class="page-num">5</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 4 -->
-  <div class="page" data-index="3">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        I never want to change a single thing about you.<br><br>
-        I only wanted the privilege of witnessing<br>
-        every version of you...<br>
-        the excited one, the sleepy one,<br>
-        the stubborn one, the overthinking one,<br>
-        the one who loves to feel my belly button<br>
-        and just loves to talk about gross things.<br><br>
-        <em>Every season of you<br>has become my favorite season.</em>
+  <!-- PAGE 4 : bed kiss photo -->
+  <div class="page photo-page" data-index="3">
+    <div class="page-front">
+      <div class="page-inner">
+        <div class="polaroid" style="--rot: 2deg;">
+          <img src="18C5B772-6F7D-4C09-9CE5-7DF297DDBB13.JPG" alt="us">
+          <div class="cap">every version of you &#9825;</div>
+        </div>
+        <div class="prose">
+          I never want to change a single thing about you.<br><br>
+          I only wanted the privilege of witnessing<br>
+          every version of you...<br>
+          the excited one, the sleepy one,<br>
+          the stubborn one, the overthinking one,<br>
+          the one who loves to feel my belly button<br>
+          and just loves to talk about gross things.<br><br>
+          <em>Every season of you<br>has become my favorite season.</em>
+        </div>
+        <div class="page-num">4</div>
       </div>
-      <div class="page-num">4</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 3 -->
-  <div class="page" data-index="2">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        Every day you trusted me with another page.<br><br>
-        Another story.<br>
-        Another laugh.<br>
-        Another fear.<br>
-        Another dream.<br><br>
-        And somehow, every page only made me<br>
-        <em>want to stay longer.</em>
+  <!-- PAGE 3 : pout selfie photo -->
+  <div class="page photo-page" data-index="2">
+    <div class="page-front">
+      <div class="page-inner">
+        <div class="polaroid" style="--rot: -3.5deg;">
+          <img src="IMG_4253.jpg" alt="us">
+          <div class="cap">another laugh &#9825;</div>
+        </div>
+        <div class="prose">
+          Every day you trusted me with another page.<br><br>
+          Another story.<br>
+          Another laugh.<br>
+          Another fear.<br>
+          Another dream.<br><br>
+          And somehow, every page only made me<br>
+          <em>want to stay longer.</em>
+        </div>
+        <div class="page-num">3</div>
       </div>
-      <div class="page-num">3</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
-  <!-- PAGE 2 -->
-  <div class="page" data-index="1">
-    <div class="page-inner">
-      <div class="page-flower">&#10048;</div>
-      <div class="prose">
-        My Rushuu,<br><br>
-        Eleven months.<br><br>
-        Eleven months of reading you, listening, learning,<br>
-        and slowly understanding the beautiful<br>
-        little universe that is you.<br><br>
-        Not because I wanted to solve you<br>
-        like some impossible puzzle,<br>
-        but because every part of you deserved to be known...<br>
-        <em>gently, patiently, lovingly.</em>
+  <!-- PAGE 2 : windy smiles photo -->
+  <div class="page photo-page" data-index="1">
+    <div class="page-front">
+      <div class="page-inner">
+        <div class="polaroid" style="--rot: 2.8deg;">
+          <img src="IMG_3307.jpg" alt="us">
+          <div class="cap">the beautiful little universe &#9825;</div>
+        </div>
+        <div class="prose">
+          My Rushuu,<br><br>
+          Eleven months of reading you, listening, learning,<br>
+          and slowly understanding the beautiful<br>
+          little universe that is you.<br><br>
+          Not because I wanted to solve you<br>
+          like some impossible puzzle,<br>
+          but because every part of you deserved to be known...<br>
+          <em>gently, patiently, lovingly.</em>
+        </div>
+        <div class="page-num">2</div>
       </div>
-      <div class="page-num">2</div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
   <!-- COVER -->
   <div class="page cover" data-index="0">
-    <div class="page-inner">
-      <div class="small-label">Eleven Months &bull; One Heart</div>
-      <div class="flower">&#127800;</div>
-      <h1>11 Months<br>of Us</h1>
-      <div class="for-line">For My Rushuu</div>
-      <div class="tap">~ tap to open ~</div>
+    <div class="page-front">
+      <div class="page-inner">
+        <span class="pressed tl" style="filter:none; opacity:.85;">&#127800;</span>
+        <span class="pressed br" style="filter:none; opacity:.85;">&#127801;</span>
+        <div class="small-label">Eleven Months &bull; One Heart</div>
+        <div class="flower">&#127800;</div>
+        <h1>11 Months<br>of Us</h1>
+        <div class="for-line">For My Rushuu</div>
+        <div class="seal">K &#9829; R</div>
+        <div class="tap">~ tap to open ~</div>
+      </div>
+      <div class="shade"></div>
     </div>
-    <div class="shade"></div>
+    <div class="page-back"><span>&#9829;</span></div>
   </div>
 
 </div>
@@ -525,16 +584,16 @@
 </div>
 
 <script>
-  // ---------- Floating hearts ----------
+  // Floating romance
   (function () {
     var layer = document.getElementById('heartsLayer');
-    var items = ['\u2764\uFE0F', '\uD83E\uDE77', '\uD83D\uDC9B', '\uD83E\uDD0D', '\uD83C\uDF38', '\u2728', '\uD83C\uDF37'];
-    for (var i = 0; i < 20; i++) {
+    var items = ['\u2764\uFE0F', '\uD83E\uDE77', '\uD83C\uDF38', '\u2728', '\uD83C\uDF37', '\uD83E\uDD0D', '\uD83C\uDF3C'];
+    for (var i = 0; i < 18; i++) {
       var s = document.createElement('span');
       s.className = 'float-item';
       s.textContent = items[Math.floor(Math.random() * items.length)];
       s.style.left = (Math.random() * 100) + 'vw';
-      s.style.fontSize = (12 + Math.random() * 18) + 'px';
+      s.style.fontSize = (11 + Math.random() * 17) + 'px';
       s.style.animationDuration = (9 + Math.random() * 9) + 's';
       s.style.animationDelay = (Math.random() * 12) + 's';
       s.style.opacity = 0;
@@ -542,7 +601,7 @@
     }
   })();
 
-  // ---------- Booklet ----------
+  // Booklet
   var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
   pages.sort(function (a, b) {
     return parseInt(a.getAttribute('data-index')) - parseInt(b.getAttribute('data-index'));
@@ -551,6 +610,7 @@
   var totalPages = pages.length;
   var current = 0;
   var busy = false;
+  var FLIP_MS = 900;
 
   var dotsWrap = document.getElementById('dots');
   for (var i = 0; i < totalPages; i++) {
@@ -559,7 +619,6 @@
     dotsWrap.appendChild(d);
   }
   var dots = dotsWrap.children;
-
   var prevBtn = document.getElementById('prevBtn');
   var nextBtn = document.getElementById('nextBtn');
 
@@ -572,6 +631,7 @@
         pages[i].classList.remove('flipped');
         pages[i].style.zIndex = totalPages - i + 20;
       }
+      pages[i].classList.toggle('active', i === current);
       dots[i].className = 'dot' + (i === Math.min(current, totalPages - 1) ? ' active' : '');
     }
     prevBtn.disabled = current === 0;
@@ -585,21 +645,19 @@
     setTimeout(function () {
       page.classList.remove('turning');
       busy = false;
-    }, 1500);
+    }, FLIP_MS);
   }
 
   function next() {
     if (busy || current >= totalPages - 1) return;
-    var page = pages[current];
-    animateTurn(page);
+    animateTurn(pages[current]);
     current++;
     refresh();
   }
   function prev() {
     if (busy || current <= 0) return;
     current--;
-    var page = pages[current];
-    animateTurn(page);
+    animateTurn(pages[current]);
     refresh();
   }
 
